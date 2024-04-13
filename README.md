@@ -26,7 +26,7 @@ This can be and should be handled by users. Just feed me the URL.
 
 ## Usage
 
-`./Shrimp <Stream-URL>`
+`./shrimp <Stream-URL>`
 
 Simply pass your streaming endpoint URL as an argument.
 
