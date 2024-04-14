@@ -24,6 +24,10 @@ We don't shill stations here, not even my own. If you are lost, try http://dir.x
 
 This can be and should be handled by users. Just feed me the URL.
 
+> Why shrimp, if not cRustacean
+
+It's the best euphemism I can think of when you pin together "Simple Internet Music Player". I like Rust, though.
+
 ## Usage
 
 `./shrimp <Stream-URL>`
