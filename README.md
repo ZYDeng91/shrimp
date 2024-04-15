@@ -30,6 +30,8 @@ It's the best euphemism I can think of when you pin together "Simple Internet Mu
 
 ## Usage
 
+`make build` to produce the executable (without debug symbols) under the project's root directory.
+
 `./shrimp <Stream-URL>`
 
 Simply pass your streaming endpoint URL as an argument.
