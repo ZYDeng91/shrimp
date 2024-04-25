@@ -1,17 +1,19 @@
 package main 
 
 import (
-	"os"
 	"log"
+	"flag"
 )
 
 func main() {
-	if len(os.Args) < 2 {
+	single := flag.Bool("s", false, "single playback (disable autoplay)")
+	isFile := flag.Bool("f", false, "specify input as local file")
+	flag.Parse()
+	tail := flag.Args()
+	if len(tail) == 0 {
 		log.Fatal("An argument is required")
-		os.Exit(0)
 	}
-	url := os.Args[1]
-	src, err := URLSource(url)
+	src, err := NewSource(tail[0], *isFile)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -31,6 +33,9 @@ func main() {
 	for {
 		player.Play(d)
 		<-player.done
+		if *single {
+			break
+		}
 		//fmt.Println("retrying")
 		d, err = NewDecoder(src)
 		if err != nil {

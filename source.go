@@ -2,9 +2,18 @@ package main
 
 import (
 	"io"
+	"os"
 	"fmt"
 	"net/http"
 )
+
+func NewSource(url string, isFile bool) (io.Reader, error) {
+	if isFile {
+		return fileSource(url)
+	} else {
+		return URLSource(url)
+	}
+}
 
 func URLSource(url string) (io.Reader, error) {
 	res, err := http.Get(url)
@@ -21,4 +30,12 @@ func URLSource(url string) (io.Reader, error) {
 	}
 
 	return res.Body, nil
+}
+
+func fileSource(file string) (io.Reader, error) {
+	f, err := os.Open(file)
+	if err != nil {
+		return nil, err
+	}
+	return f, nil
 }
