@@ -30,9 +30,11 @@ It's the best euphemism I can think of when you pin together "Simple Internet Mu
 
 ## Usage
 
-`make build` to produce the executable (without debug symbols) under the project's root directory.
+`make build` to produce the executable.
 
 `./shrimp <Stream-URL>`
+
+`./shrimp -f -s <file-location>` to play a local file, remove the `-s` flag to loop ad infinitum.
 
 Simply pass your streaming endpoint URL as an argument.
 
@@ -45,5 +47,5 @@ Ogg Vorbis (https://github.com/jfreymuth/oggvorbis)
 - Display metadata when playing
 - Take keyboard input when playing (for basic commands like pause and quit)
 - Add Opus codec support
-- Add option to play local files
+- ~~Add option to play local files~~
 - Investigate the mystery of go's compiled binary size
