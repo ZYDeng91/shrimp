@@ -34,18 +34,19 @@ It's the best euphemism I can think of when you pin together "Simple Internet Mu
 
 `./shrimp <Stream-URL>`
 
-`./shrimp -f -s <file-location>` to play a local file, remove the `-s` flag to loop ad infinitum.
-
 Simply pass your streaming endpoint URL as an argument.
 
-[Oto](https://github.com/ebitengine/oto)'s drivers should support multiple platforms.
+`./shrimp -f -s <file-location>` to play a local file, remove the `-s` flag to loop ad infinitum.
+
+[Oto](https://github.com/ebitengine/oto)'s drivers should provide cross-platform support.
 
 ## Supporting Codec(s)
 Ogg Vorbis (https://github.com/jfreymuth/oggvorbis)
 
 ## TODO:
-- Display metadata when playing
+- ~~Display metadata when playing~~
 - Take keyboard input when playing (for basic commands like pause and quit)
 - Add Opus codec support
 - ~~Add option to play local files~~
 - Investigate the mystery of go's compiled binary size
+it sux to be go i guess, disabling debug symbols is the most I can do 

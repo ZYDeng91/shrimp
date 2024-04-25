@@ -2,12 +2,14 @@ package main
 
 import (
 	"log"
+	"fmt"
 	"flag"
 )
 
 func main() {
 	single := flag.Bool("s", false, "single playback (disable autoplay)")
 	isFile := flag.Bool("f", false, "specify input as local file")
+	quiet := flag.Bool("q", false, "suppress non-fatal outputs")
 	flag.Parse()
 	tail := flag.Args()
 	if len(tail) == 0 {
@@ -22,7 +24,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	if !*quiet {
+		fmt.Println("Vendor: ", d.GetVendor())
+		fmt.Print("Now Playing: ", d.GetHeader())
+	}
 	bufSize := 2048
 
 	player, err := NewPlayer(d.r.SampleRate(), d.r.Channels(), bufSize)
@@ -40,6 +45,11 @@ func main() {
 		d, err = NewDecoder(src)
 		if err != nil {
 			log.Fatal(err)
+		}
+		if !*quiet {
+			// control sequence black magic to update stdout inline
+			fmt.Print("\033[2K\r")
+			fmt.Print("Now Playing: ", d.GetHeader())
 		}
 	}
 

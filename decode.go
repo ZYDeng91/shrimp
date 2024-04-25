@@ -20,6 +20,43 @@ func NewDecoder(src io.Reader) (*decoder, error){
 	return &decoder{r, src, nil}, nil
 }
 
+func (d *decoder) GetVendor() string {
+	return d.r.CommentHeader().Vendor
+}
+
+func (d *decoder) GetHeader() string {
+	comments := d.r.CommentHeader().Comments
+	res := make([]byte, 0)
+	ok := false
+	for _, item := range(comments) {
+		if item[:6] == "title=" {
+			res = append(res, item[6:]...)
+			ok = true
+			break
+		}
+	}
+
+	if !ok {
+		res = append(res, "unknown"...)
+	}
+
+	res = append(res, " - "...)
+
+	ok = false
+	for _, item := range(comments) {
+		if item[:7] == "artist=" {
+			res = append(res, item[7:]...)
+			ok = true
+			break
+		}
+	}
+	if !ok {
+		res = append(res, "unknown"...)
+	}
+
+	return string(res)
+}
+
 func (d *decoder) Read(samples [][2]float64) (n int, ok bool) {
 	if d.err != nil {
 		return 0, false
