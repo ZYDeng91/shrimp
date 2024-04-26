@@ -7,10 +7,10 @@ import (
 )
 
 type player struct {
-	samples [][2]float64
-	buf     []byte
-	otoplayer  *oto.Player
-	done    chan bool
+	samples   [][2]float64
+	buf       []byte
+	otoplayer *oto.Player
+	done      chan bool
 }
 
 func NewPlayer(sampleRate, channels, bufSize int) (*player, error) {
