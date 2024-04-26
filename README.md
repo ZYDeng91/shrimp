@@ -38,10 +38,10 @@ Simply pass your streaming endpoint URL as an argument.
 
 `./shrimp -f -s <file-location>` to play a local file, remove the `-s` flag to loop ad infinitum.
 
-[Oto](https://github.com/ebitengine/oto)'s drivers should provide cross-platform support.
+Cross-platform functionality should be supported by [Oto](https://github.com/ebitengine/oto/tree/v1.0.1)'s drivers.
 
 ## Supporting Codec(s)
-Ogg Vorbis (https://github.com/jfreymuth/oggvorbis)
+[Ogg Vorbis](https://github.com/jfreymuth/oggvorbis)
 
 ## TODO:
 - ~~Display metadata when playing~~

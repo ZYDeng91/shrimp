@@ -19,5 +19,9 @@
 
 !Makefile
 
+!/testdata/*
+
+!/.github/workflows/*
+
 # ...even if they are in subdirectories
 !*/

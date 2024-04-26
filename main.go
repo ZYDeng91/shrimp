@@ -52,6 +52,6 @@ func main() {
 			fmt.Print("Now Playing: ", d.GetHeader())
 		}
 	}
-
+	fmt.Println()
 	log.Print("Done playing, program exited.")
 }

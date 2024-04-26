@@ -5,7 +5,6 @@ go 1.22.1
 require (
 	github.com/hajimehoshi/oto v1.0.1
 	github.com/jfreymuth/oggvorbis v1.0.5
-	github.com/pkg/errors v0.9.1
 )
 
 require (
