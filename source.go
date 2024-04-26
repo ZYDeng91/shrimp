@@ -1,10 +1,10 @@
 package main
 
 import (
-	"io"
-	"os"
 	"fmt"
+	"io"
 	"net/http"
+	"os"
 )
 
 func NewSource(url string, isFile bool) (io.Reader, error) {
@@ -18,7 +18,7 @@ func NewSource(url string, isFile bool) (io.Reader, error) {
 func URLSource(url string) (io.Reader, error) {
 	res, err := http.Get(url)
 	if err != nil {
-		return nil, err	
+		return nil, err
 	}
 
 	if res.StatusCode != 200 {

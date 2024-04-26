@@ -1,21 +1,21 @@
-package main 
+package main
 
 import (
+	"github.com/hajimehoshi/oto"
 	"io"
 	"log"
-	"github.com/hajimehoshi/oto"
 )
 
 type player struct {
 	samples [][2]float64
-	buf []byte
-	player *oto.Player
-	done chan bool
+	buf     []byte
+	otoplayer  *oto.Player
+	done    chan bool
 }
 
 func NewPlayer(sampleRate, channels, bufSize int) (*player, error) {
 	samples := make([][2]float64, bufSize)
-	buf := make([]byte, bufSize*4)	
+	buf := make([]byte, bufSize*4)
 	ctx, err := oto.NewContext(sampleRate, channels, 2, bufSize*4)
 	if err != nil {
 		return nil, err
@@ -53,7 +53,7 @@ func (p *player) Play(d *decoder) {
 					p.buf[i*4+c*2+1] = high
 				}
 			}
-			p.player.Write(p.buf)
+			p.otoplayer.Write(p.buf)
 		}
 	}()
 }

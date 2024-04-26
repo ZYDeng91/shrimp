@@ -1,18 +1,17 @@
-package main 
+package main
 
 import (
-	"io"
-	"github.com/pkg/errors"
 	"github.com/jfreymuth/oggvorbis"
+	"io"
 )
 
 type decoder struct {
-	r *oggvorbis.Reader
+	r   *oggvorbis.Reader
 	src io.Reader
 	err error
 }
 
-func NewDecoder(src io.Reader) (*decoder, error){
+func NewDecoder(src io.Reader) (*decoder, error) {
 	r, err := oggvorbis.NewReader(src)
 	if err != nil {
 		return nil, err
@@ -28,7 +27,7 @@ func (d *decoder) GetHeader() string {
 	comments := d.r.CommentHeader().Comments
 	res := make([]byte, 0)
 	ok := false
-	for _, item := range(comments) {
+	for _, item := range comments {
 		if item[:6] == "title=" {
 			res = append(res, item[6:]...)
 			ok = true
@@ -43,7 +42,7 @@ func (d *decoder) GetHeader() string {
 	res = append(res, " - "...)
 
 	ok = false
-	for _, item := range(comments) {
+	for _, item := range comments {
 		if item[:7] == "artist=" {
 			res = append(res, item[7:]...)
 			ok = true
@@ -74,7 +73,7 @@ func (d *decoder) Read(samples [][2]float64) (n int, ok bool) {
 			break
 		}
 		if err != nil {
-			d.err = errors.Wrap(err, "ogg/vorbis")
+			d.err = err
 			break
 		}
 	}
