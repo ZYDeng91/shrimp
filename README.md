@@ -46,7 +46,13 @@ Ogg Vorbis (https://github.com/jfreymuth/oggvorbis)
 ## TODO:
 - ~~Display metadata when playing~~
 - Take keyboard input when playing (for basic commands like pause and quit)
+
+Most solutions require importing extra libs, we'll see if it's worth
+
 - Add Opus codec support
 - ~~Add option to play local files~~
 - Investigate the mystery of go's compiled binary size
-it sux to be go i guess, disabling debug symbols is the most I can do 
+
+It sux to be go I guess, disabling debug symbols is the most I can do
+
+- Add test cases & mess with github actions
