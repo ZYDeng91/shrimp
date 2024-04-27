@@ -35,17 +35,25 @@ It's the best euphemism I can think of when you pin together "Simple Internet Mu
 
 ## Usage
 
+### Prerequisite
+
+If on Linux, make sure `ALSA` is installed.
+
+### Build
+
 `make build` to produce the executable.
 
-`./shrimp <Stream-URL>`
+### Run
 
-Simply pass your streaming endpoint URL as an argument.
+`./shrimp <Stream-URL>` to play a stream over http(s).
 
-`./shrimp -f -s <file-location>` to play a local file, remove the `-s` flag to loop ad infinitum.
+`./shrimp -f -s <file-location>` to play a local file, drop the `-s` flag to loop ad infinitum.
 
-Cross-platform functionality should be supported by [Oto](https://github.com/ebitengine/oto/tree/v1.0.1).
+### Platforms
 
-## Supporting Codec(s)
+Cross-platform functionality is supported by [Oto](https://github.com/ebitengine/oto/tree/v1.0.1)'s drivers.
+
+### Supporting Codec(s)
 [Ogg Vorbis](https://github.com/jfreymuth/oggvorbis)
 
 ## TODO:
@@ -63,5 +71,5 @@ It sux to be go I guess, disabling debug symbols is the most I can do
 - Add test cases & mess with github actions
 - Add playlist support (will require resampling)
 
-### Meme
-![Not a mascot](https://zydeng.com/assets/img/shrimp.png)
+## Meme
+<img alt="not a mascot" src="https://zydeng.com/assets/img/shrimp.png" width=40%>
