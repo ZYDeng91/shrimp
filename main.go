@@ -30,6 +30,8 @@ func main() {
 	}
 	bufSize := 2048
 
+	// for playlists, files may have different sample rate & channels
+	// init a new player every time is undesirable
 	player, err := NewPlayer(d.r.SampleRate(), d.r.Channels(), bufSize)
 	if err != nil {
 		log.Fatal(err)

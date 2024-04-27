@@ -1,7 +1,7 @@
 # This workflow will build a golang project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
 
-name: Go
+name: Build
 
 on:
   push:
@@ -10,12 +10,13 @@ on:
     branches: [ "master" ]
 
 jobs:
-
   build:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
-        go-version: [ '1.22.1' ]
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+        go-version: [ '1.22.x' ]
+    name: Go ${{ matrix.go-version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -26,17 +27,20 @@ jobs:
         go-version: ${{ matrix.go-version }}
 
     - name: Install dependencies
+      if: runner.os == 'Linux'
       run: |
         sudo apt-get install libasound2-dev
+
+    - name: Check fmt
+      # no need to check for every os
+      if: runner.os == 'Linux'
+      run: |
+        test -z "$(gofmt -d ./)"
+
+    # go vet is covered by go test
 
     - name: Build
       run: go build -v ./...
 
     - name: Test
-      run: go test -v ./... > test-log-${{ matrix.go-version }}
-
-    - name: Upload Go test results
-      uses: actions/upload-artifact@v4
-      with:
-        name: Go-results-${{ matrix.go-version }}
-        path: test-log-${{ matrix.go-version }}
+      run: go test -v ./...

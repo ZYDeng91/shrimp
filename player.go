@@ -37,6 +37,7 @@ func (p *player) Play(d *decoder) {
 					log.Fatal(d.err)
 				}
 			}
+			// convert float to bytes
 			for i := range p.samples {
 				for c := range p.samples[i] {
 					val := p.samples[i][c]
