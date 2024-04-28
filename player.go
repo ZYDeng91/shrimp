@@ -27,7 +27,6 @@ func NewPlayer(sampleRate, channels, bufSize int) (*player, error) {
 
 func (p *player) Play(d *decoder) {
 	go func() {
-		c := 0
 		for {
 			_, ok := d.Read(p.samples)
 			if !ok {
