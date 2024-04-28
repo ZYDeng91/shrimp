@@ -27,6 +27,7 @@ func NewPlayer(sampleRate, channels, bufSize int) (*player, error) {
 
 func (p *player) Play(d *decoder) {
 	go func() {
+		c := 0
 		for {
 			_, ok := d.Read(p.samples)
 			if !ok {
@@ -37,24 +38,29 @@ func (p *player) Play(d *decoder) {
 					log.Fatal(d.err)
 				}
 			}
-			// convert float to bytes
-			for i := range p.samples {
-				for c := range p.samples[i] {
-					val := p.samples[i][c]
-					if val < -1 {
-						val = -1
-					}
-					if val > +1 {
-						val = +1
-					}
-					valInt16 := int16(val * (1<<15 - 1))
-					low := byte(valInt16)
-					high := byte(valInt16 >> 8)
-					p.buf[i*4+c*2+0] = low
-					p.buf[i*4+c*2+1] = high
-				}
-			}
+			Convert(p.samples, p.buf)
 			p.otoplayer.Write(p.buf)
 		}
 	}()
+}
+
+// convert float to bytes
+// buf is updated inplace
+func Convert(samples [][2]float64, buf []byte) {
+	for i := range samples {
+		for c := range samples[i] {
+			val := samples[i][c]
+			if val < -1 {
+				val = -1
+			}
+			if val > +1 {
+				val = +1
+			}
+			valInt16 := int16(val * (1<<15 - 1))
+			low := byte(valInt16)
+			high := byte(valInt16 >> 8)
+			buf[i*4+c*2+0] = low
+			buf[i*4+c*2+1] = high
+		}
+	}
 }

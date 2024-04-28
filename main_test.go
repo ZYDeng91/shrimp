@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestPlay(t *testing.T) {
+func TestDecode(t *testing.T) {
 	src, err := NewSource("testdata/good-1-48k.ogg", true)
 	if err != nil {
 		t.Fatalf(`error creating source: %v`, err)
@@ -22,10 +22,17 @@ func TestPlay(t *testing.T) {
 	if d.r.Channels() != 2 {
 		t.Fatalf(`wrong channels: expected stereo(2), got %d`, d.r.Channels())
 	}
-	player, err := NewPlayer(48000, 2, 2048)
+}
+
+func TestConvert(t *testing.T) {
+	player, err := NewPlayer(48000, 2, 2)
 	if err != nil {
 		t.Fatalf(`error creating player: %v`, err)
 	}
-	player.Play(d)
-	<-player.done
+	player.samples = [][2]float64{{0.0025265244767069817, 0.005967817734926939}, {0.00829835794866085, 0.008000102825462818}}
+	Convert(player.samples, player.buf)
+	buf_expected := []byte{82, 0, 195, 0, 15, 1, 6, 1}
+	if string(player.buf) != string(buf_expected) {
+		t.Fatalf(`wrong convert result`)
+	}
 }
