@@ -37,7 +37,7 @@ It's the best euphemism I can think of when you pin together "Simple Internet Mu
 
 ### Prerequisite
 
-If on Linux, make sure `ALSA` is installed.
+If on Linux, make sure `ALSA` is installed, and an audio server is running (PipeWire/PulseAudio)
 
 ### Build
 
