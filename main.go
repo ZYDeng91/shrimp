@@ -26,7 +26,7 @@ func main() {
 	}
 	if !*quiet {
 		fmt.Println("Vendor: ", d.GetVendor())
-		fmt.Print("Now Playing: ", d.GetHeader())
+		fmt.Println("Now Playing: ", d.GetHeader())
 	}
 	bufSize := 2048
 
@@ -43,17 +43,13 @@ func main() {
 		if *single {
 			break
 		}
-		//fmt.Println("retrying")
-		d, err = NewDecoder(src)
-		if err != nil {
-			log.Fatal(err)
-		}
+		d.Reset()
 		if !*quiet {
 			// control sequence black magic to update stdout inline
-			fmt.Print("\033[2K\r")
-			fmt.Print("Now Playing: ", d.GetHeader())
+			// cursor up 1 line + clear line + carriage return
+			fmt.Print("\033[1A\033[2K\r")
+			fmt.Println("Now Playing: ", d.GetHeader())
 		}
 	}
-	fmt.Println()
 	log.Print("Done playing, program exited.")
 }

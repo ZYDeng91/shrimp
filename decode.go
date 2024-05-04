@@ -79,3 +79,7 @@ func (d *decoder) Read(samples [][2]float64) (n int, ok bool) {
 	}
 	return n, ok
 }
+
+func (d *decoder) Reset() {
+	d.r, d.err = oggvorbis.NewReader(d.src)
+}
