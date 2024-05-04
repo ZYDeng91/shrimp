@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/jfreymuth/oggvorbis"
 	"io"
+	"strings"
 )
 
 type decoder struct {
@@ -25,35 +26,21 @@ func (d *decoder) GetVendor() string {
 
 func (d *decoder) GetHeader() string {
 	comments := d.r.CommentHeader().Comments
-	res := make([]byte, 0)
-	ok := false
+	patterns := []string{"title=", "artist="}
+	res := make([]string, len(patterns))
 	for _, item := range comments {
-		if item[:6] == "title=" {
-			res = append(res, item[6:]...)
-			ok = true
-			break
+		for i, pattern := range patterns {
+			if res[i] == "" && item[:len(pattern)] == pattern {
+				res[i] = item[len(pattern):]
+			}
 		}
 	}
-
-	if !ok {
-		res = append(res, "unknown"...)
-	}
-
-	res = append(res, " - "...)
-
-	ok = false
-	for _, item := range comments {
-		if item[:7] == "artist=" {
-			res = append(res, item[7:]...)
-			ok = true
-			break
+	for i, item := range res {
+		if item == "" {
+			res[i] = "unknown"
 		}
 	}
-	if !ok {
-		res = append(res, "unknown"...)
-	}
-
-	return string(res)
+	return strings.Join(res, " - ")
 }
 
 func (d *decoder) Read(samples [][2]float64) (n int, ok bool) {
