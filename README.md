@@ -56,20 +56,5 @@ Cross-platform functionality is supported by [Oto](https://github.com/ebitengine
 ### Supporting Codec(s)
 [Ogg Vorbis](https://github.com/jfreymuth/oggvorbis)
 
-## TODO:
-- ~~Display metadata when playing~~
-- Take keyboard input when playing (for basic commands like pause and quit)
-
-Most solutions require importing extra libs, we'll see if it's worth. (no interaction = no seek)
-
-- Add Opus codec support
-- ~~Add option to play local files~~
-- Investigate the mystery of go's compiled binary size
-
-It sux to be go I guess, disabling debug symbols is the most I can do
-
-- Add test cases & mess with github actions
-- Add playlist support (will require resampling)
-
 ## Meme
 <img alt="not a mascot" src="https://zydeng.com/assets/img/shrimp.png" width=40%>
