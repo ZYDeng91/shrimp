@@ -28,10 +28,11 @@ func main() {
 		fmt.Println("Vendor: ", d.GetVendor())
 		fmt.Println("Now Playing: ", d.GetHeader())
 	}
-	bufSize := 2048
 
-	// for playlists, files may have different sample rate & channels
-	// init a new player every time is undesirable
+	// I had lags for any bufSize above 1000 (1s)
+	// also oto won't play until the buffer is full - probably should keep it low/default for now
+	bufSize := 0
+
 	player, err := NewPlayer(d.r.SampleRate(), d.r.Channels(), bufSize)
 	if err != nil {
 		log.Fatal(err)
