@@ -43,6 +43,9 @@ func (p *player) Play(d *decoder) {
 		}
 		// IsPlaying does not wait for hardware to play buffer
 		// sleep for a BufferSize to compensate?
+
+		// quick fix: close resource to prevent audio overlap
+		p.otoplayer.Close()
 		p.done <- true
 	}()
 }
@@ -54,7 +57,9 @@ func NewConverter(d *decoder) *converter {
 func (c *converter) Read(buf []byte) (int, error) {
 	// should report an error if buf size is odd
 	// hardcoded convert ratio
-	ratio := 4
+
+	// correspondence: len(buf) should be len(samples) * 2(bit depth) * channels
+	ratio := 4 // for some reason mono channel plays as usual
 	ns := len(buf) / ratio
 	if len(c.samples) < ns {
 		c.samples = make([][2]float64, ns)
@@ -70,7 +75,6 @@ func (c *converter) Read(buf []byte) (int, error) {
 
 // convert float to bytes
 // buf is updated inplace
-// correspondence: len(buf) should be len(samples) * 2(bit depth) * channels
 func Convert(samples [][2]float64, buf []byte) {
 	for i := range samples {
 		for c := range samples[i] {
