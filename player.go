@@ -1,50 +1,76 @@
 package main
 
 import (
-	"github.com/hajimehoshi/oto"
-	"io"
-	"log"
+	"github.com/ebitengine/oto/v3"
+	"time"
 )
 
 type player struct {
-	samples   [][2]float64
-	buf       []byte
+	otoctx    *oto.Context
 	otoplayer *oto.Player
 	done      chan bool
 }
 
+// a decoder wrapper to implement io.Reader
+type converter struct {
+	d       *decoder
+	samples [][2]float64
+}
+
 func NewPlayer(sampleRate, channels, bufSize int) (*player, error) {
-	samples := make([][2]float64, bufSize)
-	buf := make([]byte, bufSize*4)
-	ctx, err := oto.NewContext(sampleRate, channels, 2, bufSize*4)
+	ctx, ready, err := oto.NewContext(&oto.NewContextOptions{
+		SampleRate:   sampleRate,
+		ChannelCount: channels,
+		Format:       oto.FormatSignedInt16LE,
+		BufferSize:   time.Duration(bufSize) * time.Millisecond,
+	})
 	if err != nil {
 		return nil, err
 	}
-	otoplayer := ctx.NewPlayer()
+	<-ready
 	done := make(chan bool)
-	return &player{samples, buf, otoplayer, done}, nil
+	return &player{ctx, nil, done}, nil
 }
 
 func (p *player) Play(d *decoder) {
+	c := NewConverter(d)
+	p.otoplayer = p.otoctx.NewPlayer(c)
+	p.otoplayer.Play()
+
 	go func() {
-		for {
-			_, ok := d.Read(p.samples)
-			if !ok {
-				if d.err == io.EOF {
-					p.done <- true
-					break
-				} else {
-					log.Fatal(d.err)
-				}
-			}
-			Convert(p.samples, p.buf)
-			p.otoplayer.Write(p.buf)
+		for p.otoplayer.IsPlaying() {
+			time.Sleep(100 * time.Millisecond)
 		}
+		// IsPlaying does not wait for hardware to play buffer
+		// sleep for a BufferSize to compensate?
+		p.done <- true
 	}()
+}
+
+func NewConverter(d *decoder) *converter {
+	return &converter{d, nil}
+}
+
+func (c *converter) Read(buf []byte) (int, error) {
+	// should report an error if buf size is odd
+	// hardcoded convert ratio
+	ratio := 4
+	ns := len(buf) / ratio
+	if len(c.samples) < ns {
+		c.samples = make([][2]float64, ns)
+	}
+
+	n, ok := c.d.Read(c.samples)
+	if !ok {
+		return 0, c.d.err
+	}
+	Convert(c.samples, buf)
+	return ratio * n, nil
 }
 
 // convert float to bytes
 // buf is updated inplace
+// correspondence: len(buf) should be len(samples) * 2(bit depth) * channels
 func Convert(samples [][2]float64, buf []byte) {
 	for i := range samples {
 		for c := range samples[i] {

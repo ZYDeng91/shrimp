@@ -55,10 +55,7 @@ func (d *decoder) Read(samples [][2]float64) (n int, ok bool) {
 			n++
 			ok = true
 		}
-		if err == io.EOF {
-			d.err = err
-			break
-		}
+		// EOF is passed as well
 		if err != nil {
 			d.err = err
 			break
