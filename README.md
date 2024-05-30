@@ -7,7 +7,7 @@ A fussless command line music player.
 
 ## Why?
 
-Shrimp started as a weekend project, with the objective to create a bare-bones music player to suit my usecase (i.e. streams), while adhering to the KISS principle.
+Shrimp started as a weekend project, with the objective to create a bare-bones music player to suit my personal usecase (icecast stream), while adhering to the KISS principle.
 
 I wouldn't consider myself revinventing the wheel if most wheels are heavy and bloated.
 
@@ -35,9 +35,11 @@ It's the best euphemism I can think of when you pin together "Simple Internet Mu
 
 ## Usage
 
-### Prerequisite
+### Dependencies
 
-If on Linux, make sure `ALSA` is installed, and an audio server is running (PipeWire/PulseAudio)
+Dependencies come from one of the few imports, [Oto](https://github.com/ebitengine/oto#prerequisite).
+
+tl;dr on Linux you'll need ALSA's development library. `libasound2-dev` on Debian based distros.
 
 ### Build
 
@@ -51,7 +53,9 @@ If on Linux, make sure `ALSA` is installed, and an audio server is running (Pipe
 
 ### Platforms
 
-Cross-platform functionality is supported by [Oto](https://github.com/ebitengine/oto/tree/v1.0.1)'s drivers.
+Cross-platform functionality is supported by [Oto](https://github.com/ebitengine/oto#platforms)'s drivers.
+
+i.e. Windows, macOS, Linux, BSD, Android, iOS, Wasm, Nintendo Switch, Xbox
 
 ### Supporting Codec(s)
 [Ogg Vorbis](https://github.com/jfreymuth/oggvorbis)
