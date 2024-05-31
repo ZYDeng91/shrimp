@@ -7,10 +7,10 @@ import (
 )
 
 type decoder struct {
-	r   	*oggvorbis.Reader
+	r       *oggvorbis.Reader
 	samples [][2]float64
-	src 	io.Reader
-	err 	error
+	src     io.Reader
+	err     error
 }
 
 func NewDecoder(src io.Reader) (*decoder, error) {
