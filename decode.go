@@ -7,9 +7,10 @@ import (
 )
 
 type decoder struct {
-	r   *oggvorbis.Reader
-	src io.Reader
-	err error
+	r   	*oggvorbis.Reader
+	samples [][2]float64
+	src 	io.Reader
+	err 	error
 }
 
 func NewDecoder(src io.Reader) (*decoder, error) {
@@ -17,7 +18,7 @@ func NewDecoder(src io.Reader) (*decoder, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &decoder{r, src, nil}, nil
+	return &decoder{r, nil, src, nil}, nil
 }
 
 func (d *decoder) GetVendor() string {
@@ -43,7 +44,7 @@ func (d *decoder) GetHeader() string {
 	return strings.Join(res, " - ")
 }
 
-func (d *decoder) Read(samples [][2]float64) (n int, ok bool) {
+func (d *decoder) ReadDecoded(samples [][2]float64) (n int, ok bool) {
 	if d.err != nil {
 		return 0, false
 	}
@@ -66,4 +67,45 @@ func (d *decoder) Read(samples [][2]float64) (n int, ok bool) {
 
 func (d *decoder) Reset() {
 	d.r, d.err = oggvorbis.NewReader(d.src)
+}
+
+// implements io.Reader
+func (d *decoder) Read(buf []byte) (int, error) {
+	// should report an error if buf size is odd
+	// hardcoded convert ratio
+
+	// correspondence: len(buf) should be len(samples) * 2(byte depth) * channels
+	ratio := 4 // for some reason mono channel plays as usual
+	ns := len(buf) / ratio
+	if len(d.samples) < ns {
+		d.samples = make([][2]float64, ns)
+	}
+
+	n, ok := d.ReadDecoded(d.samples)
+	if !ok {
+		return 0, d.err
+	}
+	Convert(d.samples, buf)
+	return ratio * n, nil
+}
+
+// convert float to bytes
+// buf is updated inplace
+func Convert(samples [][2]float64, buf []byte) {
+	for i := range samples {
+		for c := range samples[i] {
+			val := samples[i][c]
+			if val < -1 {
+				val = -1
+			}
+			if val > +1 {
+				val = +1
+			}
+			valInt16 := int16(val * (1<<15 - 1))
+			low := byte(valInt16)
+			high := byte(valInt16 >> 8)
+			buf[i*4+c*2+0] = low
+			buf[i*4+c*2+1] = high
+		}
+	}
 }
