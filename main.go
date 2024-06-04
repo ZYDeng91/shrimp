@@ -45,6 +45,9 @@ func main() {
 			break
 		}
 		d.Reset()
+		if d.err != nil {
+			log.Fatal(err)
+		}
 		if !*quiet {
 			// control sequence black magic to update stdout inline
 			// cursor up 1 line + clear line + carriage return
