@@ -46,7 +46,7 @@ func main() {
 		}
 		d.Reset()
 		if d.err != nil {
-			log.Fatal(err)
+			log.Fatal(d.err)
 		}
 		if !*quiet {
 			// control sequence black magic to update stdout inline
